@@ -1,4 +1,4 @@
-# DSRAppearancePresetTool
+# DSR Appearance Preset Tool
 Tool for importing and exporting character presets in Dark Souls Remastered.
 
 ## Usage
