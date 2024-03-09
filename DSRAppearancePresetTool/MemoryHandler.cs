@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -22,6 +23,20 @@ namespace DSRAppearancePresetTool
             Synchronize = 0x00100000
         } //ProcessAccessFlags
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MEMORY_BASIC_INFORMATION64
+        {
+            public ulong BaseAddress;
+            public ulong AllocationBase;
+            public int AllocationProtect;
+            public int __alignment1;
+            public ulong RegionSize;
+            public int State;
+            public int Protect;
+            public int Type;
+            public int __alignment2;
+        } //MEMORY_BASIC_INFORMATION64
+
         [DllImport("kernel32.dll")]
         static extern IntPtr OpenProcess(ProcessAccessFlags dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
@@ -33,6 +48,9 @@ namespace DSRAppearancePresetTool
 
         [DllImport("kernel32.dll")]
         public static extern int CloseHandle(IntPtr hProcess);
+
+        [DllImport("kernel32.dll")]
+        static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION64 lpBuffer, uint dwLength);
 
         private static IntPtr GetCharDataAddress()
         {
@@ -62,33 +80,54 @@ namespace DSRAppearancePresetTool
             long searchStart = (long)moduleAddress;
             long searchEnd = searchStart + moduleSize;
 
+            IntPtr address = (IntPtr)searchStart;
             IntPtr bytesRead;
             byte[] buffer;
 
-            for(long i = searchStart; i < searchEnd; i += 0x10)
+            string searchString = "48 8B 05 ? ? ? ? 45 33 ED 48 8B F1 48 85 C0";
+            byte[] searchBytes;
+            string[] searchMask;
+
+            SearchStringToValues(searchString, out searchBytes, out searchMask);
+
+            do
             {
-                //48 8B 05 xx xx xx xx 45 33 ED 48 8B F1 48 85 C0
-                byte[] correctBytes = { 0x48, 0x8b, 0x05, 0xff, 0xff, 0xff, 0xff, 0x45, 0x33, 0xed, 0x48, 0x8b, 0xf1, 0x48, 0x85, 0xc0};
+                MEMORY_BASIC_INFORMATION64 m;
+                int result = VirtualQueryEx(processHandle, address, out m, (uint)Marshal.SizeOf(typeof(MEMORY_BASIC_INFORMATION64)));
 
-                buffer = new byte[0x10];
-                ReadProcessMemory(processHandle, (IntPtr)i, buffer, buffer.Length, out bytesRead);
+                buffer = new byte[m.RegionSize];
+                ReadProcessMemory(processHandle, address, buffer, buffer.Length, out bytesRead);
+                bool found = false;
 
-                bool found = true;
-                for(int j = 0; j < buffer.Length; j++)
+                for(int i = 0; i < buffer.Length - searchBytes.Length; i++)
                 {
-                    if (buffer[j] != correctBytes[j] && correctBytes[j] != 0xff)
+                    found = true;
+
+                    for(int j = 0; j < searchBytes.Length; j++)
                     {
-                        found = false;
+                        if (searchMask[j] != "?")
+                        {
+                            if (searchBytes[j] != buffer[i + j])
+                            {
+                                found = false;
+                                break;
+                            } //if
+                        } //if
+                    } //for
+
+                    if (found)
+                    {
+                        charDataAddress = address + i;
                         break;
                     } //if
                 } //for
 
                 if (found)
-                {
-                    charDataAddress = (IntPtr)i;
                     break;
-                } //if
-            } //for
+
+                address = (IntPtr)((ulong)address + m.RegionSize);
+            } //do
+            while ((long)address < searchEnd);
 
             buffer = new byte[4];
 
@@ -101,6 +140,24 @@ namespace DSRAppearancePresetTool
 
             return charDataAddress;
         } //ReadMemory
+
+        private static void SearchStringToValues(string searchString, out byte[] searchBytes, out string[] searchMask)
+        {
+            searchMask = searchString.Split(' ');
+            searchBytes = new byte[searchMask.Length];
+
+            for(int i = 0; i < searchMask.Length; i++)
+            {
+                if (searchMask[i] == "?")
+                {
+                    searchBytes[i] = 0;
+                } //if
+                else
+                {
+                    searchBytes[i] = byte.Parse(searchMask[i], System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture);
+                } //else
+            } //for
+        } //SearchStringToValues
 
         public static AppearanceData ReadAppearanceData()
         {
@@ -195,7 +252,6 @@ namespace DSRAppearancePresetTool
 
             //Physique
             buffer[0] = appearanceData.physique;
-            Console.WriteLine(buffer.Length);
             WriteProcessMemory(processHandle, charDataAddress + 0xcf, buffer, buffer.Length, out bytesWritten);
 
             //Hairstyle
