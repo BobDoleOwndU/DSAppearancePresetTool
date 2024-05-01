@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CF5DA72B-4AD8-48D8-847D-36170C463E29}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>DSRAppearancePresetTool</RootNamespace>
-    <AssemblyName>DSRAppearancePresetTool</AssemblyName>
+    <RootNamespace>DSAppearancePresetTool</RootNamespace>
+    <AssemblyName>DSAppearancePresetTool</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -67,6 +67,8 @@
     <Compile Include="MemoryHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PTDE.cs" />
+    <Compile Include="Remastered.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -78,6 +80,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

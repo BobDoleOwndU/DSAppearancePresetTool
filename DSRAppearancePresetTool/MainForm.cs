@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace DSRAppearancePresetTool
+namespace DSAppearancePresetTool
 {
     public partial class MainForm : Form
     {

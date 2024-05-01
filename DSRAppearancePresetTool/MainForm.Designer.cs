@@ -1,4 +1,4 @@
-﻿namespace DSRAppearancePresetTool
+﻿namespace DSAppearancePresetTool
 {
     partial class MainForm
     {
@@ -57,7 +57,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 69);
+            this.label1.Location = new System.Drawing.Point(10, 69);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(138, 13);
             this.label1.TabIndex = 2;
@@ -67,7 +67,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(165, 97);
+            this.ClientSize = new System.Drawing.Size(159, 97);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveButton);
@@ -76,7 +76,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DSR Appearance Preset Tool";
+            this.Text = "DS Appearance Preset Tool";
             this.ResumeLayout(false);
             this.PerformLayout();
 

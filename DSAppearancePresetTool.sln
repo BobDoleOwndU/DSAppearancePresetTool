@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSRAppearancePresetTool", "DSRAppearancePresetTool\DSRAppearancePresetTool.csproj", "{CF5DA72B-4AD8-48D8-847D-36170C463E29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSAppearancePresetTool", "DSRAppearancePresetTool\DSAppearancePresetTool.csproj", "{CF5DA72B-4AD8-48D8-847D-36170C463E29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

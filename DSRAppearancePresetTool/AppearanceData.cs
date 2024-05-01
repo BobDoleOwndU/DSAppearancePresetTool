@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace DSRAppearancePresetTool
+namespace DSAppearancePresetTool
 {
     public class AppearanceData
     {
