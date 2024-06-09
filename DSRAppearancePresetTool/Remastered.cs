@@ -100,24 +100,6 @@ namespace DSAppearancePresetTool
             return charDataAddress;
         } //ReadMemory
 
-        private static void SearchStringToValues(string searchString, out byte[] searchBytes, out string[] searchMask)
-        {
-            searchMask = searchString.Split(' ');
-            searchBytes = new byte[searchMask.Length];
-
-            for (int i = 0; i < searchMask.Length; i++)
-            {
-                if (searchMask[i] == "?")
-                {
-                    searchBytes[i] = 0;
-                } //if
-                else
-                {
-                    searchBytes[i] = byte.Parse(searchMask[i], System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture);
-                } //else
-            } //for
-        } //SearchStringToValues
-
         public static AppearanceData ReadAppearanceData()
         {
             AppearanceData appearanceData = new AppearanceData();
@@ -217,7 +199,7 @@ namespace DSAppearancePresetTool
             buffer = appearanceData.faceData;
             WriteProcessMemory(processHandle, charDataAddress + 0x4e0, buffer, buffer.Length, out bytesWritten);
 
-            //Face Data
+            //Skin Color
             buffer = appearanceData.skinColor;
             WriteProcessMemory(processHandle, charDataAddress + 0x512, buffer, buffer.Length, out bytesWritten);
 

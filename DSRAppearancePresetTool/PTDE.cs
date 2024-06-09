@@ -199,7 +199,7 @@ namespace DSAppearancePresetTool
             buffer = appearanceData.faceData;
             WriteProcessMemory(processHandle, charDataAddress + 0x3a0, buffer, buffer.Length, out bytesWritten);
 
-            //Face Data
+            //Skin Color
             buffer = appearanceData.skinColor;
             WriteProcessMemory(processHandle, charDataAddress + 0x3d2, buffer, buffer.Length, out bytesWritten);
 
